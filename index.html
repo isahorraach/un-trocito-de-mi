@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f0e8">
+<title>Un trocito de mí</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Allura&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fffdf9;--bg:#f7f0e8;--ink:#493b37;--muted:#8c7770;--wine:#762d3b;--wine2:#9b4a55;--line:#eadbd1}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#fffaf4 0,#f7f0e8 58%,#efe3d9 100%);color:var(--ink);font-family:'DM Sans',sans-serif}
+main{width:min(920px,100%);margin:auto;padding:58px 22px 70px;text-align:center}
+.kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--wine2)}
+h1{font:500 clamp(42px,8vw,68px) 'Allura',cursive;color:var(--wine);margin:10px 0 2px}
+.subtitle{max-width:490px;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.8}
+.rule{width:54px;height:1px;background:#c9a9a0;margin:27px auto 34px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;max-width:790px;margin:auto}
+.envelope{position:relative;min-height:176px;border:1px solid #e5d5c9;border-radius:15px;background:linear-gradient(145deg,#fffaf4,#f0e2d5);box-shadow:0 9px 24px #68463a12;padding:26px 18px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .22s,box-shadow .22s}
+.envelope:hover{transform:translateY(-4px);box-shadow:0 14px 28px #68463a20}
+.envelope:before{content:"";position:absolute;inset:0;border-radius:15px;background:linear-gradient(145deg,transparent 49.5%,#e8d6c9 50%,transparent 50.6%);opacity:.6;pointer-events:none}
+.seal{position:relative;z-index:1;width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#a95862,#762d3b 72%);display:grid;place-items:center;color:#fff1eb;font-size:19px;box-shadow:0 3px 7px #54212c35;margin-bottom:13px}
+.envelope strong{position:relative;z-index:1;font:500 19px 'Playfair Display',serif;color:#604640}
+.envelope small{position:relative;z-index:1;color:#9a8178;margin-top:8px;font-size:11px;letter-spacing:.06em}
+footer{margin-top:42px;color:#a28d83;font-size:11px;letter-spacing:.05em}
+.modal{position:fixed;inset:0;background:#30201fd1;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}
+.modal.show{display:flex}.panel{width:min(620px,100%);max-height:90vh;overflow:auto;background:var(--paper);border-radius:18px;padding:clamp(24px,5vw,42px);box-shadow:0 25px 80px #160b0b55;position:relative;text-align:left}
+.close{position:absolute;right:17px;top:13px;border:0;background:none;color:#927a71;font-size:25px;cursor:pointer}
+.panel h2{font:500 34px 'Allura',cursive;color:var(--wine);text-align:center;margin:7px 20px 22px}
+.lock{text-align:center}.lock p{color:var(--muted);font-size:14px}.lock input{width:min(100%,320px);padding:13px 15px;border:1px solid var(--line);border-radius:10px;font:15px 'DM Sans';outline:none;text-align:center;letter-spacing:.06em}.lock input:focus{border-color:var(--wine2);box-shadow:0 0 0 3px #9b4a5518}
+.openbtn{display:block;margin:13px auto 0;padding:12px 26px;border:0;border-radius:30px;background:var(--wine);color:white;font:500 13px 'DM Sans';cursor:pointer}
+.error{min-height:20px;color:#a43c48;font-size:12px;margin-top:9px}.letter{white-space:pre-wrap;font:16px/1.95 'DM Sans',sans-serif;color:#51423d}.letter[hidden]{display:none}
+.hint{font-size:11px;color:#a58f85;text-align:center;margin-top:24px}
+@media(max-width:520px){main{padding-top:42px}.grid{grid-template-columns:1fr;max-width:360px;gap:15px}.envelope{min-height:145px}.panel{padding:27px 21px}.letter{font-size:15px;line-height:1.85}}
+</style>
+</head>
+<body>
+<main>
+<div class="kicker">Un detalle para cuando estemos lejos</div>
+<h1>Un trocito de mí</h1>
+<p class="subtitle">Aunque nos separen miles de kilómetros, siempre tendrás un pedacito de mí contigo.</p>
+<div class="rule"></div>
+<section class="grid" id="grid" aria-label="Cartas">
+</section>
+<footer>Hecho con mucho cariño · abre cada sobre cuando llegue su momento ♥</footer>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="panel">
+<button class="close" id="close" aria-label="Cerrar">×</button>
+<h2 id="modalTitle">Una carta para ti</h2>
+<div class="lock" id="lock">
+<p>Este sobre tiene una pequeña contraseña… ¿te acuerdas de ella?</p>
+<input id="password" type="password" autocomplete="off" placeholder="Escribe la contraseña">
+<button class="openbtn" id="open">Abrir mi carta ♥</button>
+<div class="error" id="error" aria-live="polite"></div>
+</div>
+<div class="letter" id="letter" hidden></div>
+<div class="hint" id="hint">Un sobre cada vez. Y nada de hacer trampas 😉</div>
+</div>
+</div>
+<script>
+const letters = [{"title": "Ábreme cuando vayas a irte", "salt": "7LG43Tfci1TiV6LeRQIiaQ==", "iv": "WhmxaG8JCmA6f6QE", "data": "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"}, {"title": "Ábreme cuando me eches de menos", "salt": "pLc0mv/NPPpnvwxa2HwClg==", "iv": "6lCp2QGw1F6rVBSs", "data": "7vFvo2tDVfigX7jrmGc2cfGytNOnLFG1uJOZN6Al4hi9Ih3AGl7I3Fblz902RqLWOb7jP5x5O4ao783GKj5+Qf4iKrR4FVksG/sWb8SmXXhYJ1MKZ3vZY679qDdRWGcysRoRKka37doIN0cbJp/Gt41vq7TtXehvAvtL/tSRb2aID0g1fyldTKtV2O2jB486JY71QfNpsh2fZ3QmsiI47juMNZD6RRfadOCiS+wS6NbAiixQougozsKqSBgsxEH0xo4acjwxzGurIZ2xcMCpuLFGkJ6zoA6EQdlMiIRBuSMyJdMVgXkgFCgu+gXK4voRF1cN41j0ghWePW9ZZWLeLZqjErajiJeoc5GSRBpkS/xLB8Fn1m+GG3RsWUY7fHAqCt4XF3YYLH3b2ivlJUnzK8yzbdtW2CHJsAOwOcxT/JtET30CnnYo3yqlcpJimNB9HMJ8eWLhNb/FULDiNqFvmjQOkkgQ5qMO9lH+klX/4zAimOuNXVM/1kKZVzMsinysicD6IYgNxKG89st7bg1IY+ZlG7shKSyFeqpiF15XhURiSoBZfPhluenEwuh+UyE8y9R9WGH8n4KXyxKsEMrEj/eONaSCZSyQy89c1SMNpEtLZ+W2QzXTQJG4EkQwrUinxCB5Hj+/XOblOz1bbZFAnjAzomlqKNWkeYZgS+8ZFwDJ4QUAuv//sFagMQMG8/lrGDKxkltbhCb/zDI5f36qs+lI+q3AckT+emBAbF9GZmuRpDfjQI6T1ddrJfQ8GhXtdmtMS7DQWQZtOxn+usTnBT6uHFqLN2aVu4hPL6WkAKn70g2Qi+57f1Exre5qUKPGM4KjvpH00WSzNIyIR6B6BbLlPQGzjXmv1iw4uDDAWzq0GIb4V93J/qO6eHrhX1iYdZjV8aZSlSb2Sm7Qwwrey8pLvIVIu99SZVcrbISuw2BVyEbvrq5zePqahq8ZXVzhdXp2Q5tBHKy0P85LX3Q7Y0zpIN8B0JyA29ixJQJ7gf1fLFPUTJG02fs8aKWsw/jrNVrR1f8XXMDQ9fKPEDB7PlLZWMlKso4BP/xfBY3iY3ADhynoMhyCAoZoGjULGbICfgnnAdJ7V9zs5hjWlcv2smFUjR9wVZOgjWiLMJkx4MOMQrSTQAHwuuKOCJhY+T4NOZpFbJatKTK8lBkiiKrEAlwQTbkkEcT76k9JnuCE8jXnlIUR6plcUUjVNtZymq8x4bbMswA9kFVO1SLUvF9gm/rs/d0hcMA+33bmaD4oJVSjfwF7C2vRrtt/YQfa6Ak77+qxQS6+c/kinLxuwGurUuXahPu1VCS6/slatyIIuHtOH9MziWp0clViEzwkbZDnnlhEo2HXFHrdK+9YRhiUCn+WTvuwo6NaTjXuYQTfFCeslHKSSeN7QaQ3ToM2W551c4fnbZvbRKUfKV7Uw0o7VFpTFEOw7jnrc7i65lBamT66g/L4JFKCb32minLLnfxw4s4GvkjBHusJD4qkAIf9cHbvWJtYzW1q2NPpUlaHZwDfThIYLYYLcbm5hixZiA8L1voQC1MghkmdsQdRX0kiZxPiXH/Cosuo3X63pjO5bzPKDJg+Er78xMZpCvDmxbWTOfI+AbmsrgIMHLpiJu0Fo4tgR9r4Z1oYuRexi1n5kgZlvL8yIJceGRhlnSCj9O+H0CVHTPrxs1KMDBfrMIy+kfz6wWLJA+jFu6li6OZ24gr2pmixvaO7NHlDMHk4gRYj1b0RTL73MGV2Vzys7bT9ytq8ccUGszmv/Ba+dtOlRgWkgP7iP8UYd3kR8S+0nDfHufVbfyPsjABWrAX3Crw/5Qx4lLWsre7d4EebDdPkZpk7KawqF/G+FaUw64XLBeJGjdy7eqqjWZtw2us+NDQayf8tnGJbi3qrTh695oA4H/a32yatvjvMaReUWi4YWoyQZYeT32JWl1dq7PaEB1/ZnjdDfztorh+YFAAh51xt3n5cIqHTL8F95RWRhvv47n2I1Xo1BprW8siMRWrHZ/WURZxjHuQjwEFxV3+1o7kV0Am8qBTLv9WINq3wXzXeL2ZxWJleFyHM8ZTEe0r5qa2nMVdTB3MrbBw5/V5jjUbdfcAqcKbSOSK1OyWbfpXspIzs8zxXNPJKyreEWxsgI9ggJMajV4cV+MNHLf6cixALCSM6BUPXyo9LUu/MkG4Y986XdVGYLvjOF1KtJasr0tz+K8+cZXIUaxk="}, {"title": "Ábreme cuando necesites reírte", "salt": "n+b7Qtwu+jJO6akRvG4wlQ==", "iv": "UhD2Ej45gvfGO6jB", "data": "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"}, {"title": "Ábreme cuando te aburras", "salt": "QuRnzlJNh+hWnKm9QxSdCQ==", "iv": "9GCmT9nSP49zul3F", "data": "pmRAvGRSEATRX5XiMx9Q3NLtI8SVw+kiNclk9PMp8aXSR085IUMVoVVKjJ3HinBtfhTeLWWNNGaAPcfH43AK/CmW6GvJsdPwso6NRRNgPO8QVjZeTwiONxgHEVyb60WjypRnAygOJVZhWGbafRAXK8iXRQcHkA7uFMyYO5KmUlgs4BxCkFH1eOMY/6T50eoJZsl84kqib5FB4RM2rtl9unz6XSXaf/m7Iz8P5Eb47w4xekjW2uz59fQjbdDYa6KiVJ5QwBAz4NEcf0F+UuYpAtyNpg9Q7l/GXQmJ/0OMlgDMHef+pF7QnXToNkn3Bu43ccLS1JERmmlVRSO5mSkMG60yuJhVyrn6JNr5j+Xls/tsmLPou0zIxmFbYeFessvfDwcpk2Bu4bQR1i08Mb1SjTWK/JB9rCcJ7lfvAmb7NynHxWlWTzLYTPnYKrubTy3JhL4SnZALetpr92iy2cxxTJ323fKFpxojSixtZfiPN+mZN7AblqryzmJlN+4UobCjiswHl/qbI1exJCBEwKkYB3eFdQmTIDjpaPS6HPHZfh+eKRIQ+ts+D81+unRinQJY+GNdaGyXEWrqvl0zB4UtSVvREJCPRtoo4gc19EV6yBn90feYMAlRyRJK0craaoovS0mO9F7CfZ9//rPGcD2GDyf+D+UuzMqOBwX1oYMdtkyZ78nqpWqZtWQbuI8RTgDV5Q1SQExQpden5NSPKsaaQndT8O9gtzbS+nDf/2vCsZfidpGhVj0exeJJElWMyfi8GC3OLJ69274xJMBPefaEedfc8FWZ7XorrnThO4Xdm0a3qv1QiF2UgAgFc0tEGTHgWJjz2/tWHJViiAccaZWyk9Mpf4+eE2Iu8V7GsGGgdKuuAxBhxX01zuZgyMizyFIx5Eyz3wtdL3pyWHi5YjrHduPyVRfSi3GjYmmJIlHP0J7QWdDLQusA5VW1pyH8RjEpIKsesNcqVrmKQ08+Ael+Wn2i3OIsCGSKvH+6dsHoMnxzhVDSPeTRWOoHa1IdB1gJV8NYLScuVl29DFNRv04QiGzlkUwB/dcPFlwH233JMfe8LGTZKKVCyuy1qSCuYemGOoufR+1ID7WOGRzrZCfO7i6ywh29MGFtqthEnfSZancFzsqG7LFogg0HnzaxWzl+uekjlvFlOrM+POSI35cWLHbsT/6NlevtCwygCTERnnixjpCA2WAysAmMBQY7ql0n/AUZMl0Y6oeinH8zR78AEszXi27XEO95+8uc3FEXZ2ae/Y+ZCQDFqjxG1541VSQ7iZLWC5ZjdO8GFMxrVIC4iVhpbDJIFNOCRe3JsFL8aXwJBXQKoipZ+0NSg9L3ENxoOK2XVet7Pzh8VVUeQkaMabaXAgtomZ3PQth8pETuYhk0d8XyfQe0SJh8b422cvuv2YDJ1Rh+A4Vnq+4o4IZy0n8="}, {"title": "Ábreme cuando queden pocos días para volver", "salt": "KHM/9jDXWSRpR4RDRL1ZIA==", "iv": "aWHBibUqtt3hVVsv", "data": "w7Wz4h1fPFAFVQ/b8kvPRKnBTOVyrInXlYs4KUzDK4Ayu/5m2Lbs+FfTjEuLpgXhOvjfd9O4+LcBLUC+WnKR40Rrlua4F+Ml6M7C8u1vO7F+Zo9RcF7fMnTlKqGGLvju+4YWERPSIi3IFpb4zxhB3BMLZwidLH7W8r7hxzdRHLzdTc0I3Dabpyz5OHTn4tMovQsDXQd9LDI4HSwy5JsTGdQFm2Z3GmjUyCU5oG8J4tfbrKg2iAyYodVfAL+Cj/lGawEosXxwd+sPQHFvtuXl3dBYY9wLa+/oUKvNOfoJ2R/4aFJRTFj4jjfICSa6O6CKYleTO4y1NbC1Lrur6HR2fzKivw0s0GkMAUWLiU9DsOuTUHNqNWf4OK5mhkzUJi70QuYCNJTfuk6A/U2agRomyjaq2WkKKrl2lywKPB1nQGkZ1tXcrKiWgjChDyy/AFYsIYKGBXXvE3PB3EhhiQQKCigw3VeGegGlQKKrO+NFchaGjOLgaCsagHPTb0AEzb2yrbWu03lJQGR6+7r9bYqHieEGBE5SqJAuiYlgzXGM7iRI/BXxEoiERJ+v0L8XcrZvl/12qlcHHx+1zi0v3Sq84slBre76HJLT2FN4b/WapgLNNXCckQ5nAK0DIrcfjSTvuI6cHNOzUHulvFF64X8ZU72oY5sNBYeoh+Bttz0o2thga1G47IgDm1awwsRZPzZOWhSgwVdd9VC2Or0BDvnV6c3rvMxKVAyKLw2kw0u9375vg3CpOQPHdbJhREiItBzOvhbdK75j+rRbNKMmWXvlkJcYAHvOvl1+PgjX3hKo3cpgsK/zSbu65ZUjPHiHj6GSczANWsS9PG6Logp4rn7+41EhPVVY4iOKXK++4K5FKGEXfFWTDc2Ex4SKa4JE71CpGt5jxWG/prKuvkh9c6sBAF333geRisUCuyro/nGAKnB4Lal535JP9leZwedtqmlVqL0krmKfDt/8G84HusOESWsaSL0KgbphRalvgNr+idZj4BJamDfkTVUWH3OucdptmKk3IYMwr5fS/TGJSdckBG5ieYgAl9vat6lncN+6te9/UAIZ6Cc/RPrYAiM8ITQn2avGzQBQGQq9Eq8lqZgvfC/oC+ji8no08pJJJWf/EQ4dHbTX+eW7x9S+Hb5YoYMYt2R8qlXP0rTrVCmkHTopCDjSWkBwlMsGAVJT6VtGQx3hYCeWfMr2ikBB6AeY/L9kYQOXh4VFh9ZfZvtyjtncdNx0zmV7/t/fv1k0z5PfZai39EKPycYwr5ctjeM0nJBgL1Nt64USMnc7TNOLIn5hIxhRZwEAdfgM8hRmudKw3D5jFJ1B7MYruzeMAg8GGyI43t9nY0spoqjkLTpukddp9y+pXRWm6V0Cy8+fhS7uiAr7ayhhSgRHxiOjEUy3rd122P7+8hZfk51gsTIxrCTWsQ6ZG0IJcK7v1IzrO6AQ4h4C5g9G2qa4YwTgzGAWG3/XhMpoPYconTyUFkEGK5xnYb5ZEM+1dfn5l+BwRRKiGq9nDbnTBHGJ4BXgfkQb3CBfJDOkrQxezpoUUDNRn5GYNFurFLdDXSWzyYEXTJW6c+rPilGc0165IAScPfmUtEjSDlBVx6VyeiW6Rz03rUVCcvtRca+l+YrUQZ8GvlnL6ADV8oKww/32CQBvEAWbaZC9niSBKO6AWrRYNB34mSfGnAEtT+e60WAL+7RyXfDreRLuEfUbfycN"}];
+const grid=document.getElementById('grid'), modal=document.getElementById('modal'), title=document.getElementById('modalTitle');
+const lock=document.getElementById('lock'), pass=document.getElementById('password'), error=document.getElementById('error'), letter=document.getElementById('letter'), hint=document.getElementById('hint');
+let selected=null;
+letters.forEach((item,i)=>{
+ const b=document.createElement('button'); b.className='envelope'; b.type='button';
+ const seal=document.createElement('span');seal.className='seal';seal.textContent='♥';
+ const t=document.createElement('strong');t.textContent=item.title;
+ const s=document.createElement('small');s.textContent='UN MENSAJE PARA TI';
+ b.append(seal,t,s);b.addEventListener('click',()=>show(i));grid.append(b);
+});
+function show(i){selected=i;title.textContent=letters[i].title;modal.classList.add('show');lock.hidden=false;letter.hidden=true;pass.value='';error.textContent='';hint.textContent='Un sobre cada vez. Y nada de hacer trampas 😉';setTimeout(()=>pass.focus(),100)}
+function close(){modal.classList.remove('show');selected=null}
+document.getElementById('close').addEventListener('click',close);
+modal.addEventListener('click',e=>{if(e.target===modal)close()});
+async function unlock(){
+ if(selected===null)return;
+ error.textContent='';const password=pass.value;
+ if(!password){error.textContent='Escribe la contraseña para abrir el sobre.';return}
+ try{
+  const item=letters[selected], decode=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+  const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:decode(item.salt),iterations:310000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['decrypt']);
+  const clear=await crypto.subtle.decrypt({name:'AES-GCM',iv:decode(item.iv)},key,decode(item.data));
+  letter.textContent=new TextDecoder().decode(clear);lock.hidden=true;letter.hidden=false;hint.textContent='♥ Acuérdate de avisarme cuando leas esta carta ♥';
+ }catch(e){error.textContent='Esa contraseña no es. Prueba otra vez, cariño.'}
+}
+document.getElementById('open').addEventListener('click',unlock);
+pass.addEventListener('keydown',e=>{if(e.key==='Enter')unlock()});
+</script>
+</body>
+</html>
